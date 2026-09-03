@@ -142,17 +142,13 @@ function ContentPane() {
           </p>
         </div>
 
-        {/* Headline */}
+        {/* Headline — strictly 2 lines */}
         <h1
-          className="gradient-text font-bold leading-[1.2] text-2xl sm:text-3xl lg:text-[2rem]"
+          className="gradient-text font-bold leading-[1.35] text-sm sm:text-base md:text-lg lg:text-[1.25rem] xl:text-[1.4rem]"
           style={{ fontFamily: "var(--font-zen-dots)" }}
         >
-          Ship your MVP in days,{" "}
-          <span className="block sm:inline">not months.</span>
-          <br />
-          <span className="text-lg sm:text-2xl lg:text-[1.65rem]">
-            Launching Soon
-          </span>
+          <span className="block whitespace-nowrap">Ship your MVP in days, not months.</span>
+          <span className="block whitespace-nowrap">Launching Soon</span>
         </h1>
 
         {/* Description — Satoshi 600 */}
