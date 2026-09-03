@@ -21,25 +21,26 @@
   --font-sans:      var(--font-geist-sans);
   --font-mono:      var(--font-geist-mono);
   --font-zen-dots:  var(--font-zen-dots);
-  --font-vend-sans: "Vend Sans", system-ui, sans-serif;
   --color-brand:    #c85a1a;
 }
 
+/* ── Base — Satoshi SemiBold as body font ───────────────────────────────── */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Vend Sans", system-ui, sans-serif;
+  font-family: 'Satoshi', 'Vend Sans', system-ui, sans-serif;
+  font-weight: 600;
 }
 
-/* ── Orange gradient text utility ───────────────────────────────────────── */
+/* ── Orange gradient text ───────────────────────────────────────────────── */
 .gradient-text {
-  background: linear-gradient(90deg, #bf4e10 0%, #e87832 45%, #f5a040 100%);
+  background: linear-gradient(90deg, #bf4e10 0%, #e87832 50%, #f5a040 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ── Dashed border helper — matches the design's dash pattern ───────────── */
+/* ── Dashed border helper ───────────────────────────────────────────────── */
 .dashed-box {
   border: 1.5px dashed #c8c8c8;
 }

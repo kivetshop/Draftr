@@ -27,6 +27,7 @@ export default function WaitlistForm() {
       {/* ── Desktop / Tablet ────────────────────────────────────── */}
       <div className="hidden sm:flex">
         {/* Dashed-border input */}
+        {/* Dashed-border input — same dash style as outer container */}
         <input
           type="email"
           value={email}
@@ -35,12 +36,16 @@ export default function WaitlistForm() {
           className="
             flex-1 min-w-0
             border border-dashed border-[#bbb]
+            border border-dashed border-[#c8c8c8]
             bg-transparent
             px-4 py-3
             text-sm text-[#1a1a1a] placeholder:text-[#999]
             outline-none
             focus:border-[#888]
+            text-sm text-[#333] placeholder:text-[#aaa]
+            outline-none focus:border-[#999]
           "
+          style={{ fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 500 }}
           required
         />
 
