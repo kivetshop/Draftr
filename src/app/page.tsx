@@ -3,25 +3,28 @@ import WaitlistForm from "./components/WaitlistForm";
 import ImageGrid from "./components/ImageGrid";
 import { XIcon, LinkedInIcon, GitHubIcon } from "./components/SocialIcons";
 
-/* ─── Avatar stack ─────────────────────────────────────────────────────── */
+/* ─── Avatar Stack ──────────────────────────────────────────────────────── */
 function AvatarStack() {
-  const colors = ["#5a7a6a", "#4a6a8a", "#6a5a8a"];
-  const initials = ["A", "B", "C"];
+  const avatars = [
+    { bg: "#5a7a6a", initial: "A" },
+    { bg: "#4a6a8a", initial: "B" },
+    { bg: "#6a5a8a", initial: "C" },
+  ];
   return (
     <div className="flex items-center">
-      {colors.map((color, i) => (
+      {avatars.map(({ bg, initial }, i) => (
         <div
           key={i}
           className="
-            w-8 h-8 sm:w-10 sm:h-10
-            rounded-full border-2 border-[#f5f5f5]
+            w-9 h-9 rounded-full
+            border-2 border-[#f5f5f5]
             flex items-center justify-center
-            text-white text-xs font-bold
+            text-white text-[11px] font-bold
             -mr-2 last:mr-0
           "
-          style={{ backgroundColor: color, zIndex: i }}
+          style={{ backgroundColor: bg, zIndex: i }}
         >
-          {initials[i]}
+          {initial}
         </div>
       ))}
     </div>
@@ -31,9 +34,9 @@ function AvatarStack() {
 /* ─── Social Links ──────────────────────────────────────────────────────── */
 function SocialLinks({ centered = false }: { centered?: boolean }) {
   const links = [
-    { href: "#", icon: <XIcon size={20} />, label: "X (Twitter)" },
-    { href: "#", icon: <LinkedInIcon size={26} />, label: "LinkedIn" },
-    { href: "#", icon: <GitHubIcon size={20} />, label: "GitHub" },
+    { href: "#", icon: <XIcon size={18} />, label: "X (Twitter)" },
+    { href: "#", icon: <LinkedInIcon size={24} />, label: "LinkedIn" },
+    { href: "#", icon: <GitHubIcon size={18} />, label: "GitHub" },
   ];
 
   return (
@@ -41,11 +44,10 @@ function SocialLinks({ centered = false }: { centered?: boolean }) {
       className={`flex items-center gap-3 ${centered ? "flex-col" : "flex-row"}`}
     >
       <span
-        className={`
-          text-[10px] sm:text-xs font-bold tracking-widest
-          text-[#c85a1a]
-          ${centered ? "text-center" : ""}
-        `}
+        className="
+          text-[10px] font-bold tracking-[0.18em]
+          gradient-text
+        "
       >
         REACH US
       </span>
@@ -55,10 +57,7 @@ function SocialLinks({ centered = false }: { centered?: boolean }) {
             key={label}
             href={href}
             aria-label={label}
-            className="
-              text-[#1a1a1a] hover:text-[#c85a1a]
-              transition-colors duration-150
-            "
+            className="text-[#1a1a1a] hover:opacity-80 transition-opacity"
           >
             {icon}
           </a>
@@ -68,14 +67,18 @@ function SocialLinks({ centered = false }: { centered?: boolean }) {
   );
 }
 
-/* ─── Left / Content pane ──────────────────────────────────────────────── */
+/* ─── Content Pane ──────────────────────────────────────────────────────── */
 function ContentPane() {
   return (
-    <div className="flex flex-col justify-center gap-5 sm:gap-6 px-8 sm:px-10 md:px-14 lg:px-16 py-10 sm:py-12 md:py-14 lg:py-0">
+    /*
+     * Dashed border rectangle — matches the design exactly.
+     * The box uses a dashed stroke on all four sides.
+     */
+    <div className="dashed-box bg-white/40 p-7 sm:p-9 flex flex-col gap-5">
       {/* Logo */}
       <div>
         <span
-          className="text-lg sm:text-xl md:text-2xl text-[#c85a1a]"
+          className="gradient-text text-xl sm:text-2xl font-bold"
           style={{ fontFamily: "var(--font-zen-dots)" }}
         >
           Draftr.
@@ -87,7 +90,7 @@ function ContentPane() {
         <AvatarStack />
         <p className="text-xs sm:text-sm text-[#1a1a1a]">
           Join{" "}
-          <span className="font-bold text-[#c85a1a]">305+</span>{" "}
+          <span className="font-bold gradient-text">305+</span>{" "}
           others on the waitlist
         </p>
       </div>
@@ -95,12 +98,18 @@ function ContentPane() {
       {/* Headline */}
       <div>
         <h1
-          className="leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-4xl text-[#c85a1a]"
+          className="
+            gradient-text
+            font-bold leading-[1.25]
+            text-2xl sm:text-3xl md:text-[2rem]
+          "
           style={{ fontFamily: "var(--font-zen-dots)" }}
         >
           Ship your MVP in days, not months.
           <br />
-          <span className="text-xl sm:text-2xl md:text-3xl">Launching Soon</span>
+          <span className="text-xl sm:text-2xl md:text-[1.65rem]">
+            Launching Soon
+          </span>
         </h1>
       </div>
 
@@ -125,49 +134,80 @@ function ContentPane() {
   );
 }
 
+/*
+ * ─── Dashed column guides ───────────────────────────────────────────────────
+ * In the design there are two thin vertical dashed lines flanking the content
+ * on both sides (visible in the left content pane). We render them as
+ * absolutely-positioned pseudo-columns.
+ */
+function DashedColumns() {
+  return (
+    <>
+      {/* Left guide */}
+      <div
+        className="absolute top-0 bottom-0 left-6 w-px pointer-events-none hidden lg:block"
+        style={{ borderLeft: "1.5px dashed #d0d0d0" }}
+      />
+      {/* Right guide (left pane edge) */}
+      <div
+        className="absolute top-0 bottom-0 right-6 w-px pointer-events-none hidden lg:block"
+        style={{ borderLeft: "1.5px dashed #d0d0d0" }}
+      />
+    </>
+  );
+}
+
 /* ─── Page ──────────────────────────────────────────────────────────────── */
 export default function Home() {
   return (
     <>
-      {/*
-        ── DESKTOP layout (lg+) ─────────────────────────────────────────────
-        Left 45% = content, right 55% = image grid, full viewport height
-      */}
-      <div className="hidden lg:flex h-screen overflow-hidden">
-        {/* Content — left */}
-        <div className="w-[45%] flex-shrink-0 flex flex-col justify-center overflow-y-auto">
+      {/* ── DESKTOP (lg+): side-by-side ───────────────────────────────────── */}
+      <div className="hidden lg:flex h-screen overflow-hidden relative">
+        <DashedColumns />
+
+        {/* Left — content */}
+        <div className="w-[48%] flex-shrink-0 flex flex-col justify-center px-10 py-10 relative">
+          {/* Horizontal dashed rules top & bottom of content area */}
+          <div
+            className="absolute top-0 left-0 right-0 h-px"
+            style={{ borderTop: "1.5px dashed #d0d0d0" }}
+          />
+          <div
+            className="absolute bottom-0 left-0 right-0 h-px"
+            style={{ borderBottom: "1.5px dashed #d0d0d0" }}
+          />
           <ContentPane />
         </div>
 
-        {/* Image grid — right, full height */}
+        {/* Right — image mosaic */}
         <div className="flex-1 overflow-hidden">
           <ImageGrid />
         </div>
       </div>
 
-      {/*
-        ── TABLET layout (sm–lg) ────────────────────────────────────────────
-        Content stacked above a 3-column image grid banner
-      */}
+      {/* ── TABLET (sm–lg): content above, image banner below ─────────────── */}
       <div className="hidden sm:flex lg:hidden flex-col min-h-screen">
-        {/* Content */}
-        <div className="flex-1">
+        <div className="flex-1 px-8 py-10 relative">
+          {/* Horizontal dashed line at top */}
+          <div
+            className="absolute top-6 left-6 right-6 h-px"
+            style={{ borderTop: "1.5px dashed #d0d0d0" }}
+          />
           <ContentPane />
+          {/* Horizontal dashed line at bottom */}
+          <div
+            className="absolute bottom-6 left-6 right-6 h-px"
+            style={{ borderBottom: "1.5px dashed #d0d0d0" }}
+          />
         </div>
-
-        {/* Image banner — 3 cols, fixed height */}
         <div className="w-full h-[280px] overflow-hidden">
           <ImageGrid />
         </div>
       </div>
 
-      {/*
-        ── MOBILE layout (< sm) ─────────────────────────────────────────────
-        Single column, no image grid shown (matches design — image not visible
-        in the mobile mockup)
-      */}
+      {/* ── MOBILE (< sm): single column ──────────────────────────────────── */}
       <div className="flex sm:hidden flex-col min-h-screen">
-        <div className="flex-1">
+        <div className="flex-1 px-5 py-8">
           <ContentPane />
         </div>
       </div>
