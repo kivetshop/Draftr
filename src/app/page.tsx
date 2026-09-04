@@ -129,7 +129,7 @@ function ContentPane() {
         {/* Social proof */}
         <div className="flex items-center gap-3 flex-wrap">
           <AvatarStack />
-          <p className="text-xs sm:text-sm text-[#1a1a1a] font-[600]"
+          <p className="text-xs sm:text-sm text-[#1a1a1a] font-semibold"
              style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
             Join{" "}
             <span
@@ -142,13 +142,17 @@ function ContentPane() {
           </p>
         </div>
 
-        {/* Headline — strictly 2 lines */}
+        {/* Headline — strictly 2 lines with per-sentence top-to-bottom gradient */}
         <h1
-          className="gradient-text font-bold leading-[1.35] text-sm sm:text-base md:text-lg lg:text-[1.25rem] xl:text-[1.4rem]"
+          className="font-bold leading-[1.35] text-sm sm:text-base md:text-lg lg:text-[1.25rem] xl:text-[1.4rem] flex flex-col gap-1"
           style={{ fontFamily: "var(--font-zen-dots)" }}
         >
-          <span className="block whitespace-nowrap">Ship your MVP in days, not months.</span>
-          <span className="block whitespace-nowrap">Launching Soon</span>
+          <span className="gradient-text block whitespace-nowrap">
+            Ship your MVP in days, not months.
+          </span>
+          <span className="gradient-text block whitespace-nowrap">
+            Launching Soon
+          </span>
         </h1>
 
         {/* Description — Satoshi 600 */}
@@ -199,7 +203,7 @@ export default function Home() {
     <>
       {/* ── DESKTOP lg+: side-by-side, full viewport height ────────────── */}
       <div className="hidden lg:flex h-screen overflow-hidden">
-        <div className="w-[48%] flex-shrink-0 flex flex-col justify-center overflow-y-auto">
+        <div className="w-[48%] shrink-0 flex flex-col justify-center overflow-y-auto">
           <ContentPane />
         </div>
         <div className="flex-1 overflow-hidden">
@@ -212,7 +216,7 @@ export default function Home() {
         <div className="flex-1 flex flex-col justify-center">
           <ContentPane />
         </div>
-        <div className="w-full h-[260px] overflow-hidden">
+        <div className="w-full h-65 overflow-hidden">
           <ImageGrid />
         </div>
       </div>

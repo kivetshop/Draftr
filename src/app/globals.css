@@ -32,9 +32,9 @@ body {
   font-weight: 600;
 }
 
-/* ── Orange gradient text ───────────────────────────────────────────────── */
+/* ── Orange gradient text (top #DB6617 to bottom #F6D0B6) ───────────────── */
 .gradient-text {
-  background: linear-gradient(90deg, #bf4e10 0%, #e87832 50%, #f5a040 100%);
+  background: linear-gradient(180deg, #DB6617 0%, #F6D0B6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
