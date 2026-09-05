@@ -3,6 +3,8 @@ import Countdown from "./components/Countdown";
 import WaitlistForm from "./components/WaitlistForm";
 import ImageGrid from "./components/ImageGrid";
 import { XIcon, LinkedInIcon, GitHubIcon } from "./components/SocialIcons";
+import { Settings } from "lucide-react";
+import GhostAdminButton from "./components/GhostAdminButton";
 
 const TEAM = [
   { src: "https://i.pravatar.cc/80?img=68", alt: "Team member 1" },
@@ -129,6 +131,18 @@ export default function Home() {
           <ContentPane />
         </div>
       </div>
+
+      {/* Ghost admin entry — nearly invisible, hover to reveal */}
+      <a
+        href="/admin/dashboard"
+        aria-label="Admin"
+        className="fixed bottom-4 right-4 p-1.5 opacity-[0.06] hover:opacity-40 transition-opacity duration-500 z-50"
+      >
+        <Settings size={13} className="text-[#1a1a1a]" strokeWidth={1.5} />
+        <Settings size={13} className="text-white" strokeWidth={1.5} />
+      </a>
+      {/* Ghost admin entry — password-protected */}
+      <GhostAdminButton />
     </>
   );
 }
