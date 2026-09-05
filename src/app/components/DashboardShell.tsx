@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { BarChart2, Users } from "lucide-react";
+import { BarChart2, Users, Send } from "lucide-react";
 import WaitlistDashboard from "@/app/components/WaitlistDashboard";
 import AudienceTable from "@/app/components/AudienceTable";
+import BroadcastPanel from "@/app/components/BroadcastPanel";
 import type { AnalyticsPayload } from "@/lib/analytics";
 
 const TABS = [
   { id: "analytics", label: "Analytics", icon: BarChart2 },
-  { id: "audience",  label: "Audience",  icon: Users    },
+  { id: "audience",  label: "Audience",  icon: Users     },
+  { id: "broadcast", label: "Broadcast", icon: Send      },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -37,12 +39,18 @@ export default function DashboardShell({ data }: Props) {
           >
             <Icon size={14} />
             {label}
+            {id === "broadcast" && (
+              <span className="text-[10px] bg-orange-100 text-orange-700 px-1.5 py-0.2 rounded font-semibold ml-0.5">
+                Resend
+              </span>
+            )}
           </button>
         ))}
       </div>
 
       {tab === "analytics" && <WaitlistDashboard {...dashboardData} />}
       {tab === "audience"  && <AudienceTable initialSubscribers={subscribers} />}
+      {tab === "broadcast" && <BroadcastPanel subscribers={subscribers} />}
     </div>
   );
 }
