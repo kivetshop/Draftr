@@ -120,7 +120,7 @@ export default function Home() {
         <div className="flex-1 flex flex-col justify-center">
           <ContentPane />
         </div>
-        <div className="w-full h-[260px] overflow-hidden">
+        <div className="w-full h-65 overflow-hidden">
           <ImageGrid />
         </div>
       </div>
