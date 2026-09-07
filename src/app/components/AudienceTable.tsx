@@ -135,7 +135,7 @@ export default function AudienceTable({ initialSubscribers }: Props) {
                     className="border-b border-slate-100 hover:bg-slate-50 transition-colors last:border-0"
                   >
                     {/* Email */}
-                    <td className="px-4 py-3 text-sm text-slate-800 font-mono max-w-[200px] truncate">
+                    <td className="px-4 py-3 text-sm text-slate-800 font-mono max-w-50 truncate">
                       {sub.email}
                     </td>
 

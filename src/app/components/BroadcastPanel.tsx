@@ -461,7 +461,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
                 <span className="w-2.5 h-2.5 rounded-full bg-slate-300 inline-block" />
                 <span className="w-2.5 h-2.5 rounded-full bg-slate-300 inline-block" />
               </div>
-              <span className="text-[11px] font-mono text-slate-400 truncate max-w-[200px]">
+              <span className="text-[11px] font-mono text-slate-400 truncate max-w-50">
                 {subject || "Draftr Announcement"}
               </span>
             </div>
@@ -485,7 +485,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
             </div>
 
             {/* Email Body Frame */}
-            <div className="p-6 space-y-4 bg-white min-h-[260px]">
+            <div className="p-6 space-y-4 bg-white min-h-65">
               {/* Email Header */}
               <div className="border-b border-dashed border-slate-200 pb-3">
                 <span className="text-xl font-extrabold text-slate-900 tracking-tight">
@@ -547,7 +547,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
               </div>
               <div className="flex justify-between text-slate-600">
                 <span>Subject:</span>
-                <span className="font-medium text-slate-900 truncate max-w-[220px]">{subject}</span>
+                <span className="font-medium text-slate-900 truncate max-w-55">{subject}</span>
               </div>
             </div>
 
