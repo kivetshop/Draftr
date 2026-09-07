@@ -258,6 +258,18 @@ export default function WaitlistDashboard({
                   {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : (
                     <span className="text-slate-400 text-xs">#{i + 1}</span>
                   )}
+                <span
+                  className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center shrink-0 ${
+                    i === 0
+                      ? "bg-amber-100 text-amber-700 ring-1 ring-amber-300"
+                      : i === 1
+                      ? "bg-slate-200 text-slate-700 ring-1 ring-slate-300"
+                      : i === 2
+                      ? "bg-orange-100 text-orange-700 ring-1 ring-orange-300"
+                      : "bg-slate-100 text-slate-500"
+                  }`}
+                >
+                  #{i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-slate-800 font-medium truncate">{ref.email}</p>

@@ -12,7 +12,7 @@ import {
   XCircle,
   Loader2,
   Sparkles,
-  FileText,
+  X,
 } from "lucide-react";
 import type { Subscriber } from "@/lib/analytics";
 
@@ -33,7 +33,7 @@ interface EmailTemplate {
 const EMAIL_TEMPLATES: EmailTemplate[] = [
   {
     id: "alpha-invite",
-    badge: "🚀 Early Access",
+    badge: "Early Access",
     title: "Alpha Invite",
     subject: "You're in! Welcome to Draftr Early Access",
     message: `Hey there,
@@ -55,7 +55,7 @@ The Draftr Team`,
   },
   {
     id: "changelog",
-    badge: "⚡ Dev Update",
+    badge: "Dev Update",
     title: "What We Shipped",
     subject: "Draftr Dev Update: Faster builds, Notion sync, and dark mode",
     message: `Hey builders,
@@ -63,9 +63,9 @@ The Draftr Team`,
 Here is a quick look behind the scenes at what our team shipped this week:
 
 What's New:
-- ⚡ 3x faster workspace boot times: Reduced cold-start container initialization to under 800ms.
-- 🔗 Instant Notion & GitHub sync: Connect your databases and repositories with 1 click.
-- 🎨 Refined light & dark theme polish across all builder panels.
+- Faster workspace boot times: Reduced cold-start container initialization to under 800ms.
+- Notion & GitHub sync: Connect your databases and repositories with 1 click.
+- Refined light & dark theme polish across all builder panels.
 
 What We're Working on Next:
 - Live multi-player pair programming canvas
@@ -78,7 +78,7 @@ The Draftr Team`,
   },
   {
     id: "countdown-reminder",
-    badge: "⏳ Urgency",
+    badge: "Urgency",
     title: "48-Hour Launch",
     subject: "Final 48 Hours: Secure your 40% launch discount",
     message: `Hey there,
@@ -100,7 +100,7 @@ The Draftr Team`,
   },
   {
     id: "founder-call",
-    badge: "🎙️ 1-on-1 Chat",
+    badge: "1-on-1 Chat",
     title: "Founder Feedback",
     subject: "Quick question about what you're building (15 min chat?)",
     message: `Hey,
@@ -121,7 +121,7 @@ Draftr Founder`,
   },
   {
     id: "skip-line",
-    badge: "🎁 Referral",
+    badge: "Referral",
     title: "Skip the Line",
     subject: "Want to skip the waitlist? Invite 2 fellow builders",
     message: `Hey,
@@ -274,9 +274,10 @@ export default function BroadcastPanel({ subscribers }: Props) {
           </div>
           <button
             onClick={() => setResult(null)}
-            className="text-xs opacity-70 hover:opacity-100 font-bold"
+            className="text-xs opacity-70 hover:opacity-100 p-1 hover:bg-black/5 rounded"
+            aria-label="Dismiss message"
           >
-            ✕
+            <X size={14} />
           </button>
         </div>
       )}

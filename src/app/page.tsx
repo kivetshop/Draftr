@@ -4,7 +4,6 @@ import WaitlistForm from "./components/WaitlistForm";
 import ImageGrid from "./components/ImageGrid";
 import { XIcon, LinkedInIcon, GitHubIcon } from "./components/SocialIcons";
 import GhostAdminButton from "./components/GhostAdminButton";
-import GitHubStarButton from "./components/GitHubStarButton";
 
 const TEAM = [
   { src: "https://i.pravatar.cc/80?img=68", alt: "Team member 1" },
@@ -32,7 +31,7 @@ function SocialLinks() {
   const links = [
     { href: "#", icon: <XIcon size={18} />, label: "X (Twitter)" },
     { href: "#", icon: <LinkedInIcon size={24} />, label: "LinkedIn" },
-    { href: "https://github.com/kivetshop/Draftr", icon: <GitHubIcon size={18} />, label: "GitHub" },
+    { href: "#", icon: <GitHubIcon size={18} />, label: "GitHub" },
   ];
   return (
     <div className="flex items-center gap-3">
@@ -44,14 +43,7 @@ function SocialLinks() {
       </span>
       <div className="flex items-center gap-2 sm:gap-3">
         {links.map(({ href, icon, label }) => (
-          <a
-            key={label}
-            href={href}
-            target={href.startsWith("http") ? "_blank" : undefined}
-            rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-            aria-label={label}
-            className="text-[#1a1a1a] hover:opacity-70 transition-opacity duration-150"
-          >
+          <a key={label} href={href} aria-label={label} className="text-[#1a1a1a] hover:opacity-70 transition-opacity duration-150">
             {icon}
           </a>
         ))}
@@ -70,15 +62,11 @@ function ContentPane() {
       <div className="absolute inset-y-0 left-6 sm:left-8 lg:left-10 w-px pointer-events-none" style={{ borderLeft: "1.5px dashed #c8c8c8" }} />
       <div className="absolute inset-y-0 right-6 sm:right-8 lg:right-10 w-px pointer-events-none" style={{ borderRight: "1.5px dashed #c8c8c8" }} />
       <HDash />
-
-      {/* Header bar: Logo + Star on GitHub */}
-      <div className="py-4 sm:py-5 px-10 sm:px-14 lg:px-16 flex items-center justify-between gap-4">
+      <div className="py-4 sm:py-5 px-10 sm:px-14 lg:px-16">
         <span className="gradient-text text-lg sm:text-xl lg:text-2xl font-bold" style={{ fontFamily: "var(--font-zen-dots)" }}>
           Draftr.
         </span>
-        <GitHubStarButton variant="glass" />
       </div>
-
       <HDash />
       <div className="flex flex-col gap-5 sm:gap-6 py-6 sm:py-8 px-10 sm:px-14 lg:px-16">
         <div className="flex items-center gap-3 flex-wrap">
