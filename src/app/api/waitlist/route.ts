@@ -3,15 +3,19 @@ import { NextResponse } from "next/server";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NOTION_VERSION = "2022-06-28";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   try {
     const apiKey = process.env.NOTION_API_KEY;
     const databaseId = process.env.NOTION_DATABASE_ID;
 
     if (!apiKey || !databaseId) {
-      console.error("Missing NOTION_API_KEY or NOTION_DATABASE_ID.");
+      console.error("Missing NOTION_API_KEY or NOTION_DATABASE_ID in environment variables.");
       return NextResponse.json(
-        { error: "Server configuration error. Please try again later." },
+        {
+          error: "Server configuration error: NOTION_API_KEY or NOTION_DATABASE_ID is missing in your deployment environment variables.",
+        },
         { status: 500 }
       );
     }
@@ -51,8 +55,9 @@ export async function POST(request: Request) {
     if (!queryRes.ok) {
       const err = await queryRes.json().catch(() => ({}));
       console.error("Notion query error:", err);
+      const detail = err.message ? `: ${err.message}` : "";
       return NextResponse.json(
-        { error: "Could not connect to waitlist. Please try again later." },
+        { error: `Could not connect to Notion waitlist database${detail}. Make sure the database is shared with your integration.` },
         { status: 500 }
       );
     }
@@ -83,8 +88,9 @@ export async function POST(request: Request) {
     if (!createRes.ok) {
       const err = await createRes.json().catch(() => ({}));
       console.error("Notion create error:", err);
+      const detail = err.message ? `: ${err.message}` : "";
       return NextResponse.json(
-        { error: "Could not save your email. Please try again later." },
+        { error: `Could not save your email to Notion${detail}.` },
         { status: 500 }
       );
     }
@@ -95,8 +101,9 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     console.error("Waitlist route error:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { error: "Something went wrong. Please try again later." },
+      { error: `Something went wrong: ${message}` },
       { status: 500 }
     );
   }

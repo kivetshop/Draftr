@@ -68,23 +68,23 @@ export default function WaitlistForm() {
         body: JSON.stringify({ email }),
       });
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
       if (response.status === 201) {
         setStatus("success");
-        setMessage("You are on the list! We will reach out when we launch.");
+        setMessage(data.message || "You are on the list! We will reach out when we launch.");
         setEmail("");
       } else if (response.status === 200) {
         setStatus("already");
-        setMessage("This email is already on our waitlist. We will be in touch soon!");
+        setMessage(data.message || "This email is already on our waitlist. We will be in touch soon!");
       } else if (response.status === 400) {
         setStatus("error");
         setMessage(data.error || "Please enter a valid email address and try again.");
       } else {
         setStatus("error");
-        setMessage("Something went wrong on our end. Please try again in a moment.");
+        setMessage(data.error || "Something went wrong on our end. Please try again in a moment.");
       }
-    } catch (error) {
+    } catch {
       setStatus("error");
       setMessage("No internet connection detected. Please check your network and try again.");
     } finally {
@@ -100,65 +100,66 @@ export default function WaitlistForm() {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email address"
-            disabled={loading || status === "success"}
-            className="flex-1 min-w-0 border border-dashed border-[#c8c8c8] bg-transparent px-4 py-3 text-sm text-[#333] placeholder:text-[#aaa] outline-none focus:border-[#999] disabled:opacity-60 disabled:cursor-not-allowed"
-            style={{ fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 500 }}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (status !== "idle") setStatus("idle");
+            }}
+            placeholder="name@company.com"
             required
+            disabled={loading}
+            className="flex-1 min-w-0 bg-[#e8e8e8] text-[#1a1a1a] placeholder-[#999] text-xs font-semibold tracking-wide px-3.5 py-2.5 outline-none rounded-none disabled:opacity-60 border-0"
+            style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}
           />
           <button
             type="submit"
-            disabled={loading || status === "success"}
-            className="flex items-center bg-[#ebebeb] hover:bg-[#e2e2e2] active:bg-[#dadada] border border-l-0 border-[#c8c8c8] transition-colors shrink-0 disabled:opacity-75 disabled:cursor-not-allowed"
+            disabled={loading}
+            className="flex items-center gap-1.5 bg-[#1a1a1a] hover:bg-[#333] text-white text-xs font-bold tracking-wide px-4 py-2.5 transition-colors duration-150 rounded-none shrink-0 cursor-pointer disabled:opacity-60"
+            style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}
           >
-            <span className="px-5 py-3 text-sm font-bold text-[#1a1a1a] whitespace-nowrap" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
-              {loading ? "Joining..." : "Notify Me"}
-            </span>
-            <span className="flex items-center justify-center w-10 h-full bg-[#1a1a1a] self-stretch">
-              {loading ? (
-                <Loader2 size={15} className="text-white animate-spin" />
-              ) : (
-                <ArrowRight size={15} className="text-white" strokeWidth={2.5} />
-              )}
-            </span>
+            {loading ? (
+              <Loader2 size={13} className="animate-spin" />
+            ) : (
+              <>
+                <span>Notify Me</span>
+                <ArrowRight size={13} />
+              </>
+            )}
           </button>
         </div>
 
         {/* Mobile */}
-        <div className="flex flex-col gap-0 sm:hidden">
-          <label className="text-xs text-[#555] mb-1.5 font-medium" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
-            Enter your email address
-          </label>
+        <div className="flex sm:hidden flex-col gap-2">
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="name@example.com"
-            disabled={loading || status === "success"}
-            className="border border-[#ccc] bg-white px-3 py-3 text-sm text-[#1a1a1a] placeholder:text-[#999] outline-none disabled:opacity-60 disabled:cursor-not-allowed"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (status !== "idle") setStatus("idle");
+            }}
+            placeholder="name@company.com"
             required
+            disabled={loading}
+            className="w-full bg-[#e8e8e8] text-[#1a1a1a] placeholder-[#999] text-xs font-semibold tracking-wide px-3.5 py-2.5 outline-none rounded-none disabled:opacity-60 border-0"
+            style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}
           />
           <button
             type="submit"
-            disabled={loading || status === "success"}
-            className="flex items-center justify-between bg-[#ebebeb] hover:bg-[#e2e2e2] border border-t-0 border-[#ccc] transition-colors disabled:opacity-75 disabled:cursor-not-allowed"
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-1.5 bg-[#1a1a1a] hover:bg-[#333] text-white text-xs font-bold tracking-wide py-2.5 transition-colors duration-150 rounded-none cursor-pointer disabled:opacity-60"
+            style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}
           >
-            <span className="px-4 py-3 text-sm font-bold text-[#1a1a1a]" style={{ fontFamily: "'Satoshi', system-ui, sans-serif" }}>
-              {loading ? "Joining..." : "Notify Me"}
-            </span>
-            <span className="flex items-center justify-center w-12 self-stretch bg-[#1a1a1a]">
-              {loading ? (
-                <Loader2 size={15} className="text-white animate-spin" />
-              ) : (
-                <ArrowRight size={15} className="text-white" strokeWidth={2.5} />
-              )}
-            </span>
+            {loading ? (
+              <Loader2 size={13} className="animate-spin" />
+            ) : (
+              <>
+                <span>Notify Me</span>
+                <ArrowRight size={13} />
+              </>
+            )}
           </button>
         </div>
       </form>
 
-      {/* Feedback Banner */}
       <FeedbackBanner status={status} message={message} />
     </div>
   );
