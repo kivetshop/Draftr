@@ -1,18 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { BarChart2, Users, Send, Clock } from "lucide-react";
+import { BarChart2, Users, Send, Clock, LayoutTemplate } from "lucide-react";
 import WaitlistDashboard from "@/app/components/WaitlistDashboard";
 import AudienceTable from "@/app/components/AudienceTable";
 import BroadcastPanel from "@/app/components/BroadcastPanel";
 import CountdownController from "@/app/components/CountdownController";
+import SiteContentController from "@/app/components/SiteContentController";
 import type { AnalyticsPayload } from "@/lib/analytics";
 
 const TABS = [
-  { id: "analytics", label: "Analytics",    icon: BarChart2 },
-  { id: "audience",  label: "Audience",     icon: Users     },
-  { id: "broadcast", label: "Broadcast",    icon: Send      },
-  { id: "countdown", label: "Launch Timer", icon: Clock     },
+  { id: "analytics", label: "Analytics",    icon: BarChart2      },
+  { id: "audience",  label: "Audience",     icon: Users          },
+  { id: "broadcast", label: "Broadcast",    icon: Send           },
+  { id: "countdown", label: "Launch Timer", icon: Clock          },
+  { id: "content",   label: "Waitlist CMS", icon: LayoutTemplate },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -46,6 +48,11 @@ export default function DashboardShell({ data }: Props) {
                 Resend
               </span>
             )}
+            {id === "content" && (
+              <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.2 rounded font-semibold ml-0.5">
+                CMS
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -54,6 +61,7 @@ export default function DashboardShell({ data }: Props) {
       {tab === "audience"  && <AudienceTable initialSubscribers={subscribers} />}
       {tab === "broadcast" && <BroadcastPanel subscribers={subscribers} />}
       {tab === "countdown" && <CountdownController />}
+      {tab === "content"   && <SiteContentController />}
     </div>
   );
 }

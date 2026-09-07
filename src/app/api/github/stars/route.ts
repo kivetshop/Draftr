@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
+import { getSiteConfig } from "@/lib/site-config";
 
 export const revalidate = 300; // Cache for 5 minutes
 
 export async function GET() {
-  const repo = "kivetshop/Draftr";
+  const config = await getSiteConfig();
+  const repo = config.githubRepo || "kivetshop/Draftr";
+
   try {
     const res = await fetch(`https://api.github.com/repos/${repo}`, {
       headers: {
@@ -24,7 +27,6 @@ export async function GET() {
     console.error("Failed to fetch github stars:", e);
   }
 
-  // No mock numbers — return null if repo is private or unstarred
   return NextResponse.json({
     stars: null,
     repoUrl: `https://github.com/${repo}`,

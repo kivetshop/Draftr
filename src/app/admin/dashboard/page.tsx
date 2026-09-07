@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { fetchAllDatabasePages } from "@/lib/notion";
 import { aggregateAnalytics } from "@/lib/analytics";
 import DashboardShell from "@/app/components/DashboardShell";
@@ -62,12 +63,14 @@ export default function AdminDashboardPage() {
       {/* Header */}
       <header className="border-b border-slate-200 px-6 lg:px-10 py-4 flex items-center justify-between sticky top-0 bg-white/90 backdrop-blur z-10 shadow-xs">
         <div className="flex items-center gap-3">
-          <span
-            className="text-lg font-bold text-slate-900"
+          <Link
+            href="/"
+            title="Return to Waitlist Homepage"
+            className="text-lg font-bold text-slate-900 hover:opacity-75 transition-opacity inline-flex items-center group cursor-pointer"
             style={{ fontFamily: "var(--font-zen-dots, monospace)" }}
           >
             Draftr<span className="text-orange-500">.</span>
-          </span>
+          </Link>
           <span className="text-xs text-slate-500 border border-slate-300 px-2 py-0.5 rounded-full font-medium bg-slate-100">
             Admin
           </span>

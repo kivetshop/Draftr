@@ -13,6 +13,11 @@ import {
   Loader2,
   Sparkles,
   X,
+  Zap,
+  Clock,
+  MessageSquare,
+  Gift,
+  Flame,
 } from "lucide-react";
 import type { Subscriber } from "@/lib/analytics";
 
@@ -26,6 +31,8 @@ interface EmailTemplate {
   id: string;
   badge: string;
   title: string;
+  description: string;
+  iconName: "rocket" | "zap" | "clock" | "chat" | "gift";
   subject: string;
   message: string;
 }
@@ -33,8 +40,10 @@ interface EmailTemplate {
 const EMAIL_TEMPLATES: EmailTemplate[] = [
   {
     id: "alpha-invite",
-    badge: "Early Access",
-    title: "Alpha Invite",
+    badge: "VIP Access",
+    title: "Alpha Workspace Invite",
+    description: "Welcome early builders, grant private workspace pass & lock in 40% discount.",
+    iconName: "rocket",
     subject: "You're in! Welcome to Draftr Early Access",
     message: `Hey there,
 
@@ -56,7 +65,9 @@ The Draftr Team`,
   {
     id: "changelog",
     badge: "Dev Update",
-    title: "What We Shipped",
+    title: "Weekly Changelog",
+    description: "Showcase latest shipped features, boot speedups & roadmap sneak peeks.",
+    iconName: "zap",
     subject: "Draftr Dev Update: Faster builds, Notion sync, and dark mode",
     message: `Hey builders,
 
@@ -78,8 +89,10 @@ The Draftr Team`,
   },
   {
     id: "countdown-reminder",
-    badge: "Urgency",
-    title: "48-Hour Launch",
+    badge: "High Urgency",
+    title: "48-Hour Launch Alert",
+    description: "Create conversion urgency before early founder discounts officially expire.",
+    iconName: "clock",
     subject: "Final 48 Hours: Secure your 40% launch discount",
     message: `Hey there,
 
@@ -100,8 +113,10 @@ The Draftr Team`,
   },
   {
     id: "founder-call",
-    badge: "1-on-1 Chat",
-    title: "Founder Feedback",
+    badge: "1-on-1 Discovery",
+    title: "Founder Feedback Chat",
+    description: "Personal note asking for 15-minute customer discovery feedback calls.",
+    iconName: "chat",
     subject: "Quick question about what you're building (15 min chat?)",
     message: `Hey,
 
@@ -121,8 +136,10 @@ Draftr Founder`,
   },
   {
     id: "skip-line",
-    badge: "Referral",
-    title: "Skip the Line",
+    badge: "Viral Referral",
+    title: "Skip the Waitlist Line",
+    description: "Push subscribers to invite team members and jump the queue.",
+    iconName: "gift",
     subject: "Want to skip the waitlist? Invite 2 fellow builders",
     message: `Hey,
 
@@ -146,6 +163,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
   const [isSendingTest, setIsSendingTest] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [activeView, setActiveView] = useState<"edit" | "preview">("edit");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [result, setResult] = useState<{
     type: "success" | "error";
     text: string;
@@ -164,11 +182,12 @@ export default function BroadcastPanel({ subscribers }: Props) {
       : allCount;
 
   const handleApplyTemplate = (tmpl: EmailTemplate) => {
+    setSelectedTemplateId(tmpl.id);
     setSubject(tmpl.subject);
     setMessage(tmpl.message);
     setResult({
       type: "success",
-      text: `Loaded "${tmpl.title}" template! You can customize the text below.`,
+      text: `Loaded "${tmpl.title}" template! You can fine-tune the text below.`,
     });
   };
 
@@ -242,6 +261,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
       setShowConfirm(false);
       setSubject("");
       setMessage("");
+      setSelectedTemplateId(null);
     } catch (e) {
       setResult({
         type: "error",
@@ -250,6 +270,16 @@ export default function BroadcastPanel({ subscribers }: Props) {
       setShowConfirm(false);
     } finally {
       setIsSending(false);
+    }
+  };
+
+  const renderTemplateIcon = (icon: EmailTemplate["iconName"]) => {
+    switch (icon) {
+      case "rocket": return <Flame size={14} className="text-orange-600" />;
+      case "zap":    return <Zap size={14} className="text-amber-600" />;
+      case "clock":  return <Clock size={14} className="text-red-500" />;
+      case "chat":   return <MessageSquare size={14} className="text-blue-500" />;
+      case "gift":   return <Gift size={14} className="text-emerald-600" />;
     }
   };
 
@@ -282,30 +312,60 @@ export default function BroadcastPanel({ subscribers }: Props) {
         </div>
       )}
 
-      {/* Pre-built Email Template Selector */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs space-y-2.5">
+      {/* Visual Email Template Gallery */}
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-            <Sparkles size={14} className="text-orange-500" />
-            Quick Email Templates (Click to Load)
+          <div className="flex items-center gap-2">
+            <span className="w-6 h-6 rounded-lg bg-orange-100 text-orange-700 flex items-center justify-center">
+              <Sparkles size={13} />
+            </span>
+            <div>
+              <h3 className="text-xs font-bold text-slate-900">Email Template Gallery</h3>
+              <p className="text-[11px] text-slate-400">Click any card to load high-converting copy</p>
+            </div>
+          </div>
+          <span className="text-[10px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
+            5 Ready-to-Send Designs
           </span>
-          <span className="text-[11px] text-slate-400">High-converting waitlist copy</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-          {EMAIL_TEMPLATES.map((tmpl) => (
-            <button
-              key={tmpl.id}
-              type="button"
-              onClick={() => handleApplyTemplate(tmpl)}
-              className="p-2.5 rounded-lg border border-slate-200 hover:border-orange-400 hover:bg-orange-50/40 text-left transition-all group"
-            >
-              <span className="text-[10px] font-bold text-orange-600 block">{tmpl.badge}</span>
-              <span className="text-xs font-semibold text-slate-800 group-hover:text-orange-950 block truncate mt-0.5">
-                {tmpl.title}
-              </span>
-            </button>
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          {EMAIL_TEMPLATES.map((tmpl) => {
+            const isSelected = selectedTemplateId === tmpl.id;
+            return (
+              <button
+                key={tmpl.id}
+                type="button"
+                onClick={() => handleApplyTemplate(tmpl)}
+                className={`flex flex-col text-left p-3.5 rounded-xl border transition-all relative ${
+                  isSelected
+                    ? "border-orange-500 bg-orange-50/60 ring-1 ring-orange-500 shadow-xs"
+                    : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/80 bg-white"
+                }`}
+              >
+                <div className="flex items-center justify-between w-full mb-1.5">
+                  <div className="flex items-center gap-1.5">
+                    {renderTemplateIcon(tmpl.iconName)}
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      {tmpl.badge}
+                    </span>
+                  </div>
+                  {isSelected && (
+                    <span className="w-2 h-2 rounded-full bg-orange-600" />
+                  )}
+                </div>
+
+                <p className="text-xs font-bold text-slate-900 line-clamp-1">{tmpl.title}</p>
+                <p className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-tight">
+                  {tmpl.description}
+                </p>
+
+                <div className="mt-3 pt-2 border-t border-slate-100/80 text-[10px] text-slate-400 font-mono truncate">
+                  {tmpl.subject}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -402,7 +462,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
               rows={9}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Start writing or choose a quick template from above..."
+              placeholder="Select a visual template from above or start typing here..."
               className="w-full border border-slate-200 rounded-xl p-4 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all resize-y leading-relaxed font-sans"
             />
           </div>
@@ -461,7 +521,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
                 <span className="w-2.5 h-2.5 rounded-full bg-slate-300 inline-block" />
                 <span className="w-2.5 h-2.5 rounded-full bg-slate-300 inline-block" />
               </div>
-              <span className="text-[11px] font-mono text-slate-400 truncate max-w-50">
+              <span className="text-[11px] font-mono text-slate-400 truncate max-w-[200px]">
                 {subject || "Draftr Announcement"}
               </span>
             </div>
@@ -485,7 +545,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
             </div>
 
             {/* Email Body Frame */}
-            <div className="p-6 space-y-4 bg-white min-h-65">
+            <div className="p-6 space-y-4 bg-white min-h-[260px]">
               {/* Email Header */}
               <div className="border-b border-dashed border-slate-200 pb-3">
                 <span className="text-xl font-extrabold text-slate-900 tracking-tight">
@@ -501,7 +561,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
                 <div className="text-xs leading-relaxed text-slate-600 space-y-2 whitespace-pre-wrap font-sans">
                   {message || (
                     <span className="text-slate-300 italic">
-                      Choose a template above or start typing on the left. The live preview will update here in real-time.
+                      Pick a template above or type your announcement. Live preview renders automatically.
                     </span>
                   )}
                 </div>
@@ -547,7 +607,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
               </div>
               <div className="flex justify-between text-slate-600">
                 <span>Subject:</span>
-                <span className="font-medium text-slate-900 truncate max-w-55">{subject}</span>
+                <span className="font-medium text-slate-900 truncate max-w-[220px]">{subject}</span>
               </div>
             </div>
 
