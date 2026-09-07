@@ -35,7 +35,11 @@ interface StatCardProps {
 
 function StatCard({ icon, label, value, sub, accent }: StatCardProps) {
   return (
-    <div className={`bg-white border rounded-xl p-5 flex flex-col gap-3 hover:shadow-md transition-shadow ${accent ? "border-orange-200" : "border-slate-200"}`}>
+    <div
+      className={`bg-white border rounded-xl p-5 flex flex-col gap-3 hover:shadow-md transition-shadow ${
+        accent ? "border-orange-200" : "border-slate-200"
+      }`}
+    >
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
           {label}
@@ -254,10 +258,6 @@ export default function WaitlistDashboard({
             )}
             {topReferrers.map((ref, i) => (
               <div key={i} className="flex items-center gap-3 py-2.5">
-                <span className="text-sm font-bold w-6 text-center">
-                  {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : (
-                    <span className="text-slate-400 text-xs">#{i + 1}</span>
-                  )}
                 <span
                   className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center shrink-0 ${
                     i === 0
