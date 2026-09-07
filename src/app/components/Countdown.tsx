@@ -9,14 +9,10 @@ interface TimeLeft {
   seconds: number;
 }
 
-// ── Update this to your real launch date ──────────────────────────────────
-const LAUNCH_DATE = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-
 function pad2(n: number) {
   return String(n).padStart(2, "0");
 }
 
-/** A single digit tile — styled exactly like the mockup */
 function DigitTile({ digit }: { digit: string }) {
   return (
     <div
@@ -35,12 +31,6 @@ function DigitTile({ digit }: { digit: string }) {
   );
 }
 
-/**
- * A single counter unit: a row of digit tiles + a label below.
- *
- * DAYS uses only 1 tile (matches the mockup: ⊘ DAYS)
- * All others use 2 tiles (⊘⊘ HOURS / ⊘⊘ MINUTES / ⊘⊘ SECONDS)
- */
 function CounterUnit({
   value,
   label,
@@ -54,13 +44,11 @@ function CounterUnit({
 
   return (
     <div className="flex flex-col items-center gap-1.5">
-      {/* Tile row */}
       <div className="flex gap-1">
         {str.split("").map((d, i) => (
           <DigitTile key={i} digit={d} />
         ))}
       </div>
-      {/* Label */}
       <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.18em] text-[#666] uppercase">
         {label}
       </span>
@@ -69,6 +57,10 @@ function CounterUnit({
 }
 
 export default function Countdown() {
+  const [targetDate, setTargetDate] = useState<Date>(() => {
+    return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  });
+
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -76,9 +68,30 @@ export default function Countdown() {
     seconds: 0,
   });
 
+  // Fetch dynamic countdown target from API
+  useEffect(() => {
+    let isMounted = true;
+    fetch("/api/waitlist/countdown")
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted && data.targetDate) {
+          const d = new Date(data.targetDate);
+          if (!isNaN(d.getTime())) {
+            setTargetDate(d);
+          }
+        }
+      })
+      .catch((err) => console.error("Error fetching countdown:", err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Tick calculation
   useEffect(() => {
     const tick = () => {
-      const diff = LAUNCH_DATE.getTime() - Date.now();
+      const diff = targetDate.getTime() - Date.now();
       if (diff <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
@@ -90,15 +103,16 @@ export default function Countdown() {
         seconds: Math.floor((diff / 1000) % 60),
       });
     };
+
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [targetDate]);
 
   return (
     <div className="flex items-end gap-5 sm:gap-6">
-      <CounterUnit value={timeLeft.days}    label="DAYS"    digits={1} />
-      <CounterUnit value={timeLeft.hours}   label="HOURS"   digits={2} />
+      <CounterUnit value={timeLeft.days} label="DAYS" digits={1} />
+      <CounterUnit value={timeLeft.hours} label="HOURS" digits={2} />
       <CounterUnit value={timeLeft.minutes} label="MINUTES" digits={2} />
       <CounterUnit value={timeLeft.seconds} label="SECONDS" digits={2} />
     </div>

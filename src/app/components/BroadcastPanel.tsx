@@ -12,6 +12,7 @@ import {
   XCircle,
   Loader2,
   Sparkles,
+  FileText,
 } from "lucide-react";
 import type { Subscriber } from "@/lib/analytics";
 
@@ -20,6 +21,121 @@ interface Props {
 }
 
 type AudienceFilter = "Active" | "All" | "Pending";
+
+interface EmailTemplate {
+  id: string;
+  badge: string;
+  title: string;
+  subject: string;
+  message: string;
+}
+
+const EMAIL_TEMPLATES: EmailTemplate[] = [
+  {
+    id: "alpha-invite",
+    badge: "🚀 Early Access",
+    title: "Alpha Invite",
+    subject: "You're in! Welcome to Draftr Early Access",
+    message: `Hey there,
+
+Thank you for backing Draftr from day one.
+
+We are officially rolling out our private alpha invites, and your workspace is ready. You can claim your early access pass here:
+https://draftr.dev/login?ref=early-access
+
+As an early supporter, you receive:
+- Full access to all Pro features during the preview period
+- Guaranteed 40% discount for life once public billing starts
+- Direct access to our engineering team in our private community
+
+Feel free to reply directly to this email with any feedback or bugs you notice. We read and respond to every message!
+
+Best,
+The Draftr Team`,
+  },
+  {
+    id: "changelog",
+    badge: "⚡ Dev Update",
+    title: "What We Shipped",
+    subject: "Draftr Dev Update: Faster builds, Notion sync, and dark mode",
+    message: `Hey builders,
+
+Here is a quick look behind the scenes at what our team shipped this week:
+
+What's New:
+- ⚡ 3x faster workspace boot times: Reduced cold-start container initialization to under 800ms.
+- 🔗 Instant Notion & GitHub sync: Connect your databases and repositories with 1 click.
+- 🎨 Refined light & dark theme polish across all builder panels.
+
+What We're Working on Next:
+- Live multi-player pair programming canvas
+- Automated Dockerfile and deployment scaffolding
+
+Have a feature request you'd like to see prioritized? Hit reply and let us know!
+
+Cheers,
+The Draftr Team`,
+  },
+  {
+    id: "countdown-reminder",
+    badge: "⏳ Urgency",
+    title: "48-Hour Launch",
+    subject: "Final 48 Hours: Secure your 40% launch discount",
+    message: `Hey there,
+
+Just a quick heads-up: our public launch is in less than 48 hours!
+
+When the countdown timer on our homepage hits zero, our early founder pricing will officially close.
+
+Your exclusive perks:
+- 40% off your subscription for the entire year
+- Guaranteed priority queue for all generation jobs
+- Founder-tier badge and community access
+
+Claim your early founder spot before the countdown ends:
+https://draftr.dev
+
+See you inside,
+The Draftr Team`,
+  },
+  {
+    id: "founder-call",
+    badge: "🎙️ 1-on-1 Chat",
+    title: "Founder Feedback",
+    subject: "Quick question about what you're building (15 min chat?)",
+    message: `Hey,
+
+I'm one of the co-founders at Draftr. First off, thank you for joining our early waitlist!
+
+We're currently hopping on quick 15-minute feedback calls with developers and founders to understand what pain points you're hoping Draftr solves for you.
+
+If you have 15 minutes to chat this week, pick a time that works best for you here:
+https://cal.com/draftr/founder-chat
+
+No sales pitch at all — just looking to build something you'll love using every day.
+
+Looking forward to connecting!
+
+Warmly,
+Draftr Founder`,
+  },
+  {
+    id: "skip-line",
+    badge: "🎁 Referral",
+    title: "Skip the Line",
+    subject: "Want to skip the waitlist? Invite 2 fellow builders",
+    message: `Hey,
+
+Want early access sooner? We have opened up priority line jumping.
+
+Every time a fellow developer or colleague signs up using your unique referral code, you move up 5 spots on the priority list. Top referrers will also receive free lifetime access to our Pro tier.
+
+Find your personal referral link inside your confirmation email and share it with your team.
+
+Keep building,
+The Draftr Team`,
+  },
+];
 
 export default function BroadcastPanel({ subscribers }: Props) {
   const [audience, setAudience] = useState<AudienceFilter>("Active");
@@ -46,6 +162,15 @@ export default function BroadcastPanel({ subscribers }: Props) {
       : audience === "Pending"
       ? pendingCount
       : allCount;
+
+  const handleApplyTemplate = (tmpl: EmailTemplate) => {
+    setSubject(tmpl.subject);
+    setMessage(tmpl.message);
+    setResult({
+      type: "success",
+      text: `Loaded "${tmpl.title}" template! You can customize the text below.`,
+    });
+  };
 
   const handleSendTest = async () => {
     if (!testEmail || !testEmail.includes("@")) {
@@ -156,7 +281,34 @@ export default function BroadcastPanel({ subscribers }: Props) {
         </div>
       )}
 
-      {/* Main Grid: Compose (left) + Preview / Settings (right) */}
+      {/* Pre-built Email Template Selector */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs space-y-2.5">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+            <Sparkles size={14} className="text-orange-500" />
+            Quick Email Templates (Click to Load)
+          </span>
+          <span className="text-[11px] text-slate-400">High-converting waitlist copy</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+          {EMAIL_TEMPLATES.map((tmpl) => (
+            <button
+              key={tmpl.id}
+              type="button"
+              onClick={() => handleApplyTemplate(tmpl)}
+              className="p-2.5 rounded-lg border border-slate-200 hover:border-orange-400 hover:bg-orange-50/40 text-left transition-all group"
+            >
+              <span className="text-[10px] font-bold text-orange-600 block">{tmpl.badge}</span>
+              <span className="text-xs font-semibold text-slate-800 group-hover:text-orange-950 block truncate mt-0.5">
+                {tmpl.title}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Grid: Compose (left) + Preview (right) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left column: Compose Form */}
         <div className="lg:col-span-7 bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5">
@@ -246,10 +398,10 @@ export default function BroadcastPanel({ subscribers }: Props) {
               <span className="text-[10px] text-slate-400">Separate paragraphs with double Enter</span>
             </div>
             <textarea
-              rows={8}
+              rows={9}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Hey there,&#10;&#10;We're excited to share that we just dropped early access invites for our first cohort of builders.&#10;&#10;Here is your private link to jump ahead in line: https://draftr.dev/invite"
+              placeholder="Start writing or choose a quick template from above..."
               className="w-full border border-slate-200 rounded-xl p-4 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all resize-y leading-relaxed font-sans"
             />
           </div>
@@ -348,7 +500,7 @@ export default function BroadcastPanel({ subscribers }: Props) {
                 <div className="text-xs leading-relaxed text-slate-600 space-y-2 whitespace-pre-wrap font-sans">
                   {message || (
                     <span className="text-slate-300 italic">
-                      Start typing your update on the left. The live preview will update here in real-time.
+                      Choose a template above or start typing on the left. The live preview will update here in real-time.
                     </span>
                   )}
                 </div>
@@ -359,17 +511,6 @@ export default function BroadcastPanel({ subscribers }: Props) {
                 <p>You received this because you are on the Draftr early access waitlist.</p>
                 <p className="text-slate-300">&copy; {new Date().getFullYear()} Draftr. All rights reserved.</p>
               </div>
-            </div>
-          </div>
-
-          {/* Quick Tips */}
-          <div className="p-4 bg-amber-50/60 border border-amber-200/70 rounded-xl text-xs text-amber-900 flex items-start gap-2.5">
-            <Sparkles size={16} className="text-amber-600 shrink-0 mt-0.5" />
-            <div className="space-y-1 text-[11px] leading-relaxed">
-              <p className="font-semibold text-amber-950">Broadcast Tip</p>
-              <p className="text-amber-800">
-                Always test send to yourself first. Resend sandbox domains can only deliver to the account owner&apos;s email address until your custom domain is verified.
-              </p>
             </div>
           </div>
         </div>

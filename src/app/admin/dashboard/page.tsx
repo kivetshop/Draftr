@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { fetchAllDatabasePages } from "@/lib/notion";
 import { aggregateAnalytics } from "@/lib/analytics";
 import DashboardShell from "@/app/components/DashboardShell";
+import GitHubStarButton from "@/app/components/GitHubStarButton";
 import { RefreshCw } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -59,7 +60,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* Header */}
-      <header className="border-b border-slate-200 px-6 lg:px-10 py-4 flex items-center justify-between sticky top-0 bg-white/90 backdrop-blur z-10 shadow-sm">
+      <header className="border-b border-slate-200 px-6 lg:px-10 py-4 flex items-center justify-between sticky top-0 bg-white/90 backdrop-blur z-10 shadow-xs">
         <div className="flex items-center gap-3">
           <span
             className="text-lg font-bold text-slate-900"
@@ -71,15 +72,19 @@ export default function AdminDashboardPage() {
             Admin
           </span>
         </div>
-        <form action="/admin/dashboard" method="GET">
-          <button
-            type="submit"
-            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 border border-slate-300 hover:border-slate-400 px-3 py-1.5 rounded-lg transition-colors bg-white"
-          >
-            <RefreshCw size={12} />
-            Refresh
-          </button>
-        </form>
+
+        <div className="flex items-center gap-3">
+          <GitHubStarButton />
+          <form action="/admin/dashboard" method="GET">
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 border border-slate-300 hover:border-slate-400 px-3 py-1.5 rounded-lg transition-colors bg-white shadow-2xs"
+            >
+              <RefreshCw size={12} />
+              Refresh
+            </button>
+          </form>
+        </div>
       </header>
 
       {/* Main */}
@@ -87,7 +92,7 @@ export default function AdminDashboardPage() {
         <div className="mb-6">
           <h1 className="text-xl font-bold text-slate-900">Waitlist Dashboard</h1>
           <p className="text-sm text-slate-500 mt-1">
-            Real-time analytics and audience management backed by Notion.
+            Real-time analytics, audience management, countdown timer, and email broadcasts.
           </p>
         </div>
         <Suspense fallback={<Skeleton />}>
