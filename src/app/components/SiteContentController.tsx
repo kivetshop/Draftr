@@ -12,11 +12,11 @@ import {
   Users,
   Eye,
   Type,
-  GitBranch,
+  Share2,
 } from "lucide-react";
 import type { SiteConfig } from "@/config/site-types";
 import { DEFAULT_SITE_CONFIG } from "@/config/site-types";
-import { GitHubIcon } from "./SocialIcons";
+import { GitHubIcon, XIcon, LinkedInIcon } from "./SocialIcons";
 
 const AVATAR_PRESET_PACKS = [
   {
@@ -97,7 +97,7 @@ export default function SiteContentController() {
       setConfig(data.config);
       setStatus({
         type: "success",
-        message: "Waitlist content updated successfully! Homepage is now serving your new text and profiles.",
+        message: "Waitlist content & social links updated successfully! Homepage is now synced.",
       });
     } catch (e) {
       setStatus({
@@ -148,7 +148,7 @@ export default function SiteContentController() {
               Customize Waitlist Landing Page
             </h2>
             <p className="text-xs text-slate-500 mt-1">
-              Dynamically control the product name, headlines, social proof number, and waiting profiles displayed on your public page.
+              Dynamically control product branding, headlines, social proof, waiting profiles, and social media links.
             </p>
           </div>
 
@@ -281,19 +281,77 @@ export default function SiteContentController() {
             </div>
           </div>
 
-          {/* GitHub Repo */}
-          <div className="space-y-1.5 pt-2 border-t border-slate-100">
-            <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-              <GitHubIcon size={13} />
-              GitHub Repository (for Star on GitHub button)
-            </label>
-            <input
-              type="text"
-              value={config.githubRepo}
-              onChange={(e) => setConfig({ ...config, githubRepo: e.target.value })}
-              placeholder="kivetshop/Draftr"
-              className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-mono text-slate-800 outline-none focus:border-orange-500"
-            />
+          {/* Social Links Section */}
+          <div className="space-y-3.5 pt-2 border-t border-slate-100">
+            <div className="flex items-center gap-1.5">
+              <Share2 size={14} className="text-orange-600" />
+              <label className="text-xs font-bold text-slate-900">
+                Social Links & Footer Attribution
+              </label>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* X / Twitter */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                  <XIcon size={13} />
+                  X (Twitter) URL
+                </label>
+                <input
+                  type="url"
+                  value={config.xUrl}
+                  onChange={(e) => setConfig({ ...config, xUrl: e.target.value })}
+                  placeholder="https://x.com/yourhandle"
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 outline-none focus:border-orange-500 font-mono"
+                />
+              </div>
+
+              {/* LinkedIn */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                  <LinkedInIcon size={14} />
+                  LinkedIn URL
+                </label>
+                <input
+                  type="url"
+                  value={config.linkedinUrl}
+                  onChange={(e) => setConfig({ ...config, linkedinUrl: e.target.value })}
+                  placeholder="https://linkedin.com/company/yourhandle"
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 outline-none focus:border-orange-500 font-mono"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* GitHub Repo */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                  <GitHubIcon size={13} />
+                  GitHub Repo (owner/repo)
+                </label>
+                <input
+                  type="text"
+                  value={config.githubRepo}
+                  onChange={(e) => setConfig({ ...config, githubRepo: e.target.value })}
+                  placeholder="kivetshop/Draftr"
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 outline-none focus:border-orange-500 font-mono"
+                />
+              </div>
+
+              {/* Footer Attribution */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700">
+                  Footer Copyright / Attribution
+                </label>
+                <input
+                  type="text"
+                  value={config.craftedByText}
+                  onChange={(e) => setConfig({ ...config, craftedByText: e.target.value })}
+                  placeholder="Crafted by Kivet"
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 outline-none focus:border-orange-500"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Actions */}
@@ -322,7 +380,7 @@ export default function SiteContentController() {
               ) : (
                 <>
                   <Save size={13} />
-                  Save Content Changes
+                  Save Content & Social Links
                 </>
               )}
             </button>
@@ -337,7 +395,7 @@ export default function SiteContentController() {
               Live Homepage Preview
             </span>
             <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-mono">
-              Synchronized Real-Time
+              Real-Time Sync
             </span>
           </div>
 
@@ -422,6 +480,21 @@ export default function SiteContentController() {
               <div className="bg-[#1a1a1a] text-white px-4 py-2 rounded-lg text-[11px] font-bold">
                 Notify Me
               </div>
+            </div>
+
+            {/* Footer Mock */}
+            <div className="pt-3 border-t border-dashed border-[#c8c8c8] flex items-center justify-between text-[10px] text-slate-500">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-orange-600">REACH US</span>
+                <div className="flex items-center gap-1.5 text-slate-700">
+                  <XIcon size={12} />
+                  <LinkedInIcon size={14} />
+                  <GitHubIcon size={12} />
+                </div>
+              </div>
+              <span className="font-semibold text-slate-700">
+                {config.craftedByText || "Crafted by Kivet"}
+              </span>
             </div>
           </div>
         </div>

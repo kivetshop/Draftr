@@ -7,6 +7,9 @@ export interface SiteConfig {
   socialProofText: string;
   profiles: string[];
   githubRepo: string;
+  xUrl: string;
+  linkedinUrl: string;
+  craftedByText: string;
 }
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
@@ -23,4 +26,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
     "https://i.pravatar.cc/80?img=33",
   ],
   githubRepo: "kivetshop/Draftr",
+  xUrl: "https://x.com",
+  linkedinUrl: "https://linkedin.com",
+  craftedByText: "Crafted by Kivet",
 };

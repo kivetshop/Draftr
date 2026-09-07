@@ -38,11 +38,19 @@ function AvatarStack({ profiles }: { profiles: string[] }) {
   );
 }
 
-function SocialLinks({ githubRepo }: { githubRepo?: string }) {
+function SocialLinks({
+  xUrl,
+  linkedinUrl,
+  githubRepo,
+}: {
+  xUrl?: string;
+  linkedinUrl?: string;
+  githubRepo?: string;
+}) {
   const repo = githubRepo || "kivetshop/Draftr";
   const links = [
-    { href: "#", icon: <XIcon size={18} />, label: "X (Twitter)" },
-    { href: "#", icon: <LinkedInIcon size={24} />, label: "LinkedIn" },
+    { href: xUrl || "https://x.com", icon: <XIcon size={18} />, label: "X (Twitter)" },
+    { href: linkedinUrl || "https://linkedin.com", icon: <LinkedInIcon size={24} />, label: "LinkedIn" },
     { href: `https://github.com/${repo}`, icon: <GitHubIcon size={18} />, label: "GitHub" },
   ];
 
@@ -126,9 +134,13 @@ function ContentPane({ config }: { config: SiteConfig }) {
       </div>
       <HDash />
       <div className="flex items-center justify-between gap-4 py-4 sm:py-5 px-10 sm:px-14 lg:px-16">
-        <SocialLinks githubRepo={config.githubRepo} />
+        <SocialLinks
+          xUrl={config.xUrl}
+          linkedinUrl={config.linkedinUrl}
+          githubRepo={config.githubRepo}
+        />
         <span className="text-[10px] sm:text-xs text-[#999] whitespace-nowrap" style={{ fontFamily: "'Satoshi', system-ui, sans-serif", fontWeight: 500 }}>
-          <span className="text-[#1a1a1a] font-semibold">Crafted by Kivet</span>
+          <span className="text-[#1a1a1a] font-semibold">{config.craftedByText || "Crafted by Kivet"}</span>
         </span>
       </div>
       <HDash />
